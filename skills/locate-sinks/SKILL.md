@@ -46,8 +46,9 @@ missing or stale, stop: **"no fresh `target.md` — run scope-target first."**
 5. Assign each sink a **stable id** (`sink-1`, `sink-2`, …), globally unique across the
    hunt, so `hypotheses.jsonl`, `survivors.jsonl`, and `findings.json` can reference it.
    Ids are assigned here, never by a subagent.
-6. Write `hunts/<VULN>/sinks.json` per the schema in `references/sinks.md`. Record the
-   step done in `state.json` with the `input_hash` of `surface-map.json` + `target.md`.
+6. Write `hunts/<VULN>/sinks.json` per the schema in `references/sinks.md`. Return a
+   structured completion result to the orchestrator — including the combined
+   `surface-map.json` + `target.md` input hash — without writing `state.json`.
 
 This step runs **once per hunt**, not once per round — it re-runs when `surface-map.json`
 or `target.md` changes (a rebuilt map, or a steer that redirects the class or threat model).

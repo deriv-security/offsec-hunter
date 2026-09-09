@@ -1,7 +1,7 @@
 {
   "name": "offsec-hunter",
   "description": "Composable, artifact-gated skills for hunting externally reachable, exploitable vulnerabilities — recon → goal → exploit.",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "license": "MIT",
   "keywords": ["security", "vulnerability", "appsec", "offensive-security", "skills"]
 }

@@ -47,5 +47,6 @@ instead of assuming the web default.
      auditable.
 
 4. Write the confirmed goal to `hunts/<VULN>/target.md` as prose, with the four dimensions
-   and the chosen vuln class as headings. Record the step done in `state.json` with the
-   `input_hash` of `surface-map.json`.
+   and the chosen vuln class as headings. Return a structured completion result to the
+   orchestrator — including the chosen `vuln` and `surface-map.json` input hash — without
+   writing `state.json`.

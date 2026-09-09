@@ -29,12 +29,17 @@ orchestrator and recorded in `state.json`:
 
 ## state.json (canonical example)
 
+The orchestrator is the **sole writer and control plane for `state.json`**. Step skills
+read it for run roots, mode, gates, and round context, then return structured completion
+results; they never mutate it. Before every state update, the orchestrator writes a
+temporary file, validates the complete JSON, and atomically replaces `state.json`.
+
 ```json
 {
   "target_root": "/abs/path/to/target",
   "output_root": "/abs/path/to/target/.offsec-hunter",
   "mode": "interactive",
-  "vuln": "RCE",                    // written by scope-target (step 2); ABSENT during step 1
+  "vuln": "RCE",                    // written by the orchestrator from scope-target's result; ABSENT during step 1
   "round": 2,
   "dry_streak": 1,
   "families": [

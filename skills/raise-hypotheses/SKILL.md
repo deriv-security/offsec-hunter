@@ -42,4 +42,5 @@ its prompt, **inject its context** — pass `output_root`, `target_root`, the ex
 paths to read (`hunts/<VULN>/sinks.json`, `hunts/<VULN>/target.md`), the assigned `sink-N` id and
 family, and a one-line threat-model summary.
 
-Record the step done in `state.json` with the `input_hash` of `sinks.json`.
+Return a structured completion result to the orchestrator, including the `input_hash` of
+`sinks.json`; do not write `state.json`.

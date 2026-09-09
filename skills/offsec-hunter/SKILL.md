@@ -47,6 +47,9 @@ Reliability comes from **artifact-gating**, not trust:
    Every later step reads them from there. Do this before any other action. Write it
    **without a `vuln` field** — `scope-target` adds that in step 2. `state.json` is step 1's
    only input channel, so leaving the class out of it is what keeps step 1 class-blind.
+   The orchestrator is the **sole writer and control plane for `state.json`**. Each step
+   reads state when needed and returns a structured completion result; it never updates
+   state itself.
 2. **Before step 1, also read the artifacts guide and the platform guide**
    (`references/artifacts.md`, `references/platform-tools.md`). The first defines
    `state.json`, the artifact tree, and the gating rules; the second maps this skill's
@@ -100,9 +103,10 @@ Each round:
 
 1. **Read `state.json`** for the resume point (`round`, `dry_streak`, `families`). This is
    what makes the loop **resumable** — a fresh or compacted orchestrator continues instead
-   of restarting. Each step tracks its completion in `state.json` with a `status` field
-   and `last_round`; re-running a step for a round it already recorded is a **no-op**
-   (already recorded in `last_round`), so crashes and resume never double-append.
+   of restarting. The orchestrator records every step completion in `state.json` with a
+   `status` field and, for loop steps, `last_round`; re-running a step for a round it
+   already recorded is a **no-op** (already recorded in `last_round`), so crashes and
+   resume never double-append.
 2. Run `raise-hypotheses` then `break-hypotheses` for this round.
 3. **Synthesize** (orchestrator, reading only compact summaries + this round's jsonl —
    never full subagent transcripts):
