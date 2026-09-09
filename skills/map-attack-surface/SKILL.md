@@ -80,6 +80,7 @@ target-level and class-agnostic, so every vuln-class hunt against this commit re
    tell which vulnerability class this run is hunting from the map alone, the map is
    contaminated — fix it before writing.
 5. Write `surface-map.json` per the schema in `references/surface-map.md`, stamped with
-   `commit` = current `HEAD`. Record the step as done in `state.json`.
+   `commit` = current `HEAD`. Return a structured completion result to the orchestrator;
+   do not write `state.json`.
 
 Prioritize what is **reachable from crafted input** over reading everything.

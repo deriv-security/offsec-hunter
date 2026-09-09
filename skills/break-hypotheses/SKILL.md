@@ -65,4 +65,4 @@ reached via more than one route in the same round), skip the append — de-dupli
 than write a second line for the same underlying bug. Dedup never happens inside the
 isolated break subagent; it can't see other candidates or the assembled chain.
 
-Record the step done in `state.json`.
+Return a structured completion result to the orchestrator; do not write `state.json`.
