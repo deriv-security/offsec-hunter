@@ -66,4 +66,21 @@ check "$out3" 'dry|two rounds|2 rounds' "explains the dry-round stop rule"
 check "$out3" 'famil' "explains the family registry"
 check "$out3" 'block|redirect' "explains blocked/redirect behaviour"
 
+# State ownership: steps return results; the orchestrator is the sole state writer.
+stateStepOut="$(run_agent 'When an offsec-hunter step finishes its artifact, what does it do with state.json? Be brief.')"
+check "$stateStepOut" 'orchestrator' "step returns completion to the orchestrator"
+check "$stateStepOut" 'return|structured result' "step returns a structured result"
+check "$stateStepOut" '(does not|doesn.t|not|never|no).*(write|modify|update|mutate)' "step does not write state.json"
+
+stateWriterOut="$(run_agent 'In offsec-hunter, who is the sole writer and control plane for state.json? Include the exact temporary-file, JSON-validation, and atomic-replacement update protocol. Be brief.')"
+check "$stateWriterOut" 'orchestrator' "orchestrator owns state.json"
+check "$stateWriterOut" 'temporary|temp file' "state update starts from a temporary file"
+check "$stateWriterOut" 'valid' "state update validates JSON"
+check "$stateWriterOut" 'atomic' "state update is atomic"
+
+stateConcurrencyOut="$(run_agent 'If two offsec-hunter step completions arrive close together, how should state.json be updated? Be brief.')"
+check "$stateConcurrencyOut" 'orchestrator' "only the orchestrator updates state"
+check "$stateConcurrencyOut" 'serial|one at a time|sequence|merge' "concurrent results are serialized or merged"
+check "$stateConcurrencyOut" '(not|never|no).*(write|update|direct|concurrent|in parallel)|concurrent.*not|parallel.*not' "steps do not write state concurrently"
+
 [ "$fail" -eq 0 ] && echo "  ---- behavioral PASS ----" || { echo "  ---- behavioral FAIL ----"; exit 1; }

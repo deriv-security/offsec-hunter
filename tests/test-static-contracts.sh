@@ -160,6 +160,12 @@ assert_file_contains "$A" '"status": "looping"' "artifacts shows looping status"
 assert_file_contains "$A" 'last_round' "artifacts shows last_round"
 assert_file_contains "$O" 'initialize' "orchestrator initializes round state"
 assert_file_contains "$O" 'no-op|already recorded' "orchestrator makes re-run idempotent"
+assert_file_contains "$A" 'sole writer and control plane' "artifacts makes orchestrator sole state writer"
+assert_file_contains "$A" 'atomically replaces' "artifacts documents atomic state updates"
+assert_file_contains "$O" 'sole writer and control plane' "orchestrator owns state control plane"
+for V in "$M" "$S" "$L" "$R" "$B" "$P"; do
+  assert_file_not_contains "$V" 'Record the step (as )?done in `state\.json`' "step returns state result to orchestrator: $V"
+done
 
 # --- v2: id authority + round tags + dedup (Task 10) ---
 assert_file_contains "$O" 'sole id authority|assigns.*id|id authority' "orchestrator is id authority"
